@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject gameOverCanvas;
 
+    private float slideSpeed = 4.0f;
+
 	// Use this for initialization
 	void Start () {
         //GM.score = 0;
@@ -31,14 +33,14 @@ public class PlayerController : MonoBehaviour {
         if ((Input.GetAxisRaw("Horizontal") == -1 && laneNum > 0) && (!controlLocked))
         {
             controlLocked = true;
-            horizVel = -4;
+            horizVel = (-1)*slideSpeed;
             StartCoroutine(stopSlide());
             laneNum--;
         }
         if ((Input.GetAxisRaw("Horizontal") == 1 && laneNum < 2) && (!controlLocked))
         {
             controlLocked = true;
-            horizVel = 4;
+            horizVel = slideSpeed;
             StartCoroutine(stopSlide());
             laneNum++;
         }
@@ -55,16 +57,11 @@ public class PlayerController : MonoBehaviour {
             GM.zVelAdj = 0;
             gameOverCanvas.gameObject.SetActive(true);
         }
-        if (other.gameObject.name == "Powerup")
-        {
-            // Placeholder. No effects yet
-            Destroy(other.gameObject);
-        }
     }
 
     IEnumerator stopSlide()
     {
-        yield return new WaitForSeconds(.25f);
+        yield return new WaitForSeconds(1 / slideSpeed);
         horizVel = 0;
         controlLocked = false;
     }
